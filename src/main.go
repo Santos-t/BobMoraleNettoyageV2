@@ -8,19 +8,22 @@ import (
 )
 
 type Data struct {
-	title string
+	Title string
 }
+
+var path = "src/templates"
+var home = template.Must(template.ParseFiles(path + "/index.html"))
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	data := Data{
-		title: "coucou",
+		Title: "coucou",
 	}
-	tmpl := template.Must(template.ParseFiles("src/templates/index.html"))
-	tmpl.Execute(w, data)
+	home.Execute(w, data)
 }
 
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", homeHandler)
+
 	http.ListenAndServe(":80", r)
 }
