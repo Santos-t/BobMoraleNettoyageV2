@@ -13,6 +13,7 @@ type User struct {
 	LastName    string
 	PhoneNumber string
 	Address     string
+	Email       string
 	Client      bool
 }
 
@@ -30,15 +31,19 @@ type BuildingsData struct {
 	BuildingList []Building
 }
 
+type ProfileData struct {
+	CurrentUser User
+}
+
 var path = "src/templates"
 var home = template.Must(template.ParseFiles(path + "/home.html"))
 var buildings = template.Must(template.ParseFiles(path + "/buildings.html"))
+var profile = template.Must(template.ParseFiles(path + "/profile.html"))
 
 //var login = template.Must(template.ParseFiles(path + "/login.html"))
 //var signup = template.Must(template.ParseFiles(path + "/signup.html"))
 //var myTickets = template.Must(template.ParseFiles(path + "/myTickets.html"))
 //var planning = template.Must(template.ParseFiles(path + "/planning.html"))
-//var profile = template.Must(template.ParseFiles(path + "/profile.html"))
 //var submittedTickets = template.Must(template.ParseFiles(path + "/submittedTickets.html"))
 //var ticketForm = template.Must(template.ParseFiles(path + "/ticketForm.html"))
 
@@ -64,7 +69,17 @@ func buildingsHandler(w http.ResponseWriter, r *http.Request) {
 	data := BuildingsData{
 		BuildingList: list,
 	}
-	home.Execute(w, data)
+	buildings.Execute(w, data)
+}
+
+func profileHandler(w http.ResponseWriter, r *http.Request) {
+	var current = User{
+		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
+	}
+	data := ProfileData{
+		CurrentUser: current,
+	}
+	profile.Execute(w, data)
 }
 
 func main() {
@@ -74,6 +89,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", homeHandler)
 	r.HandleFunc("/buildings", buildingsHandler)
+	r.HandleFunc("/profile", profileHandler)
 
 	http.ListenAndServe(":80", r)
 }

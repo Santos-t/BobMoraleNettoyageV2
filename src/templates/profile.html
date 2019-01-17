@@ -22,7 +22,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="{% url 'home' %}">Bob Moral Nettoyage</a>
+			<a class="navbar-brand" href="home.html">Bob Moral Nettoyage</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -61,25 +61,25 @@
 									<div class="form-group row">
 										<label for="email" class="col-4 col-form-label">Email</label>
 										<div class="col-8">
-											<p>{{ email }}</p>
+											<p>{{ .CurrentUser.Email }}</p>
 										</div>
 									</div>
 									<div class="form-group row">
 										<label for="firstname" class="col-4 col-form-label">Prénom</label>
 										<div class="col-8">
-											{{current_user.first_name}}
+											{{ .CurrentUser.FirstName }}
 										</div>
 									</div>
 									<div class="form-group row">
 										<label for="lastname" class="col-4 col-form-label">Nom</label>
 										<div class="col-8">
-											{{current_user.last_name}}
+											{{ .CurrentUser.LastName }}
 										</div>
 									</div>
 									<div class="form-group row">
 										<label for="telephone" class="col-4 col-form-label">Téléphone</label>
 										<div class="col-8">
-											{{current_user.phone_number}}
+											{{ .CurrentUser.PhoneNumber }}
 										</div>
 									</div>
 								</form>
@@ -90,5 +90,4 @@
 			</div>
 		</div>
 	</div>
-
 </body>
