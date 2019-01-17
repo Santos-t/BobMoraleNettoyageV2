@@ -66,13 +66,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-										{% for building in building_list %}
+										{{ range .BuildingList }}
                                         <tr>
-                                        <td>{{ building.address }}</td>
-                                        <td>{{ building.complement }}</td>
-                                        <td>{{ building.floor_nb }}</td>
+                                        <td>{{ .Address }}</td>
+                                        <td>{{ .Complement }}</td>
+                                        <td>{{ .FloorNb }}</td>
 										</tr>
-										{% endfor %}
+										{{ end }}
                                     </tbody>
                                 </table>
 							</div>
