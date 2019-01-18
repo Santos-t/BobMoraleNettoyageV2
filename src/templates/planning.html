@@ -44,15 +44,17 @@
 						<tr>
 							<th>Date</th>
 							<th>Ticket</th>
+							<th>Contact</th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for ticket in ticket_list %}
+						{{ range .TicketList }}
 						<tr>
-							<td>{{ticket.clean_date}}</td>
-							<td>{{ticket.building.address}},   {{ticket.building.complement}},   Étage # {{ticket.floor}}</td>
+							<td>{{ .Date }}</td>
+							<td>{{ .Address.Address }},   {{ .Address.Complement }},   Étage # {{ .Floor }}</td>
+							<td>{{ .Owner.PhoneNumber }}</td>
 						</tr>
-						{% endfor %}
+						{{ end }}
 					</tbody>
 				</table>
 			</div>

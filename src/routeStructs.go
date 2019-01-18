@@ -15,3 +15,7 @@ type ProfileData struct {
 type MyTicketsData struct {
 	TicketList []Ticket
 }
+
+type planningData struct {
+	TicketList []Ticket
+}
