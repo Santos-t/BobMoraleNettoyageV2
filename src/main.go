@@ -40,11 +40,11 @@ var buildings = template.Must(template.ParseFiles(path + "/buildings.html"))
 var profile = template.Must(template.ParseFiles(path + "/profile.html"))
 var myTickets = template.Must(template.ParseFiles(path + "/myTickets.html"))
 var planning = template.Must(template.ParseFiles(path + "/planning.html"))
+var ticketForm = template.Must(template.ParseFiles(path + "/ticketForm.html"))
 
 //var login = template.Must(template.ParseFiles(path + "/login.html"))
 //var signup = template.Must(template.ParseFiles(path + "/signup.html"))
 //var submittedTickets = template.Must(template.ParseFiles(path + "/submittedTickets.html"))
-//var ticketForm = template.Must(template.ParseFiles(path + "/ticketForm.html"))
 
 func main() {
 	fs := http.FileServer(http.Dir("assets/"))
@@ -56,6 +56,7 @@ func main() {
 	r.HandleFunc("/profile", profileHandler)
 	r.HandleFunc("/myTickets", myTicketsHandler)
 	r.HandleFunc("/planning", planningHandler)
+	r.HandleFunc("/ticketForm", ticketFormHandler)
 
 	http.ListenAndServe(":80", r)
 }

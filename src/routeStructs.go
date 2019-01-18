@@ -16,6 +16,10 @@ type MyTicketsData struct {
 	TicketList []Ticket
 }
 
-type planningData struct {
+type PlanningData struct {
 	TicketList []Ticket
+}
+
+type TicketFormData struct {
+	BuildingList []Building
 }

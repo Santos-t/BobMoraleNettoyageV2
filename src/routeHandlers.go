@@ -66,8 +66,23 @@ func planningHandler(w http.ResponseWriter, r *http.Request) {
 			Owner: current, Address: address, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: "2 mars",
 		},
 	}
-	data := planningData{
+	data := PlanningData{
 		TicketList: tickets,
 	}
 	planning.Execute(w, data)
+}
+
+func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
+	var owner = User{
+		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
+	}
+	var list = []Building{
+		Building{
+			Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: owner,
+		},
+	}
+	data := BuildingsData{
+		BuildingList: list,
+	}
+	ticketForm.Execute(w, data)
 }

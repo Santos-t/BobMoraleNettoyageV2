@@ -43,9 +43,9 @@
 			<div class="form-group">
 				<label for="building">Sélectionnez le bâtiment</label>
 				<select class="form-control" name="building" id="building" required>
-					{% for building in building_list %}
-						<option value="{{building.address}}">{{ building.address }}    {{ building.complement }}</option>
-					{% endfor %}
+					{{ range .BuildingList }}
+						<option value="{{ .Address }}">{{ .Address }}    {{ .Complement }}</option>
+					{{ end }}
 				</select>
 			</div>
 			<div class="form-group">
