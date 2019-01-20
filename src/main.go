@@ -25,6 +25,7 @@ type Building struct {
 }
 
 type Ticket struct {
+	ID          int
 	Owner       User
 	Address     Building
 	Img         string
@@ -41,10 +42,9 @@ var profile = template.Must(template.ParseFiles(path + "/profile.html"))
 var myTickets = template.Must(template.ParseFiles(path + "/myTickets.html"))
 var planning = template.Must(template.ParseFiles(path + "/planning.html"))
 var ticketForm = template.Must(template.ParseFiles(path + "/ticketForm.html"))
-
-//var login = template.Must(template.ParseFiles(path + "/login.html"))
-//var signup = template.Must(template.ParseFiles(path + "/signup.html"))
-//var submittedTickets = template.Must(template.ParseFiles(path + "/submittedTickets.html"))
+var submittedTickets = template.Must(template.ParseFiles(path + "/submittedTickets.html"))
+var login = template.Must(template.ParseFiles(path + "/login.html"))
+var signup = template.Must(template.ParseFiles(path + "/signup.html"))
 
 func main() {
 	fs := http.FileServer(http.Dir("assets/"))
@@ -57,6 +57,9 @@ func main() {
 	r.HandleFunc("/myTickets", myTicketsHandler)
 	r.HandleFunc("/planning", planningHandler)
 	r.HandleFunc("/ticketForm", ticketFormHandler)
+	r.HandleFunc("/submittedTickets", submittedTicketsHandler)
+	r.HandleFunc("/login", loginHandler)
+	r.HandleFunc("/signup", signupHandler)
 
 	http.ListenAndServe(":80", r)
 }

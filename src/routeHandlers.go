@@ -86,3 +86,31 @@ func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	ticketForm.Execute(w, data)
 }
+
+func submittedTicketsHandler(w http.ResponseWriter, r *http.Request) {
+	var current = User{
+		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
+	}
+	var address = Building{
+		Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: current,
+	}
+	var tickets = []Ticket{
+		Ticket{
+			Owner: current, Address: address, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: "2 mars",
+		},
+	}
+	data := PlanningData{
+		TicketList: tickets,
+	}
+	submittedTickets.Execute(w, data)
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	data := loginData{}
+	login.Execute(w, data)
+}
+
+func signupHandler(w http.ResponseWriter, r *http.Request) {
+	data := signupData{}
+	signup.Execute(w, data)
+}

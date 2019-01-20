@@ -36,31 +36,31 @@
 	</nav>
 	
 	<div class="container">
-		{% for ticket in ticket_list %}		
+		{{ range .TicketList }}		
 		<div class="well">
 			<div class="media">
 				<a class="pull-left" href="">
 					<img class="media-object" src="/static/img/Robin_beau.jpg" style="width: 11em">
 				</a>
 				<div class="media-body">
-					<h4 class="media-heading">{{ticket.building.address}}</h4>
-					<p>{{ticket.building.complement}}</p>
+					<h4 class="media-heading">{{ .Address.Address }}</h4>
+					<p>{{  .Address.Complement}}</p>
 					<ul class="list-inline list-unstyled">
-						<li><span><i class="glyphicon glyphicon-calendar"></i> {{ticket.clean_date}}</span></li>
+						<li><span><i class="glyphicon glyphicon-calendar"></i> {{ .Date }}</span></li>
 						<li>|</li>
-						<li><span><i class="glyphicon glyphicon-ok-circle"></i> {{ticket.status}}</span></li>
+						<li><span><i class="glyphicon glyphicon-ok-circle"></i> {{ .Status }}</span></li>
 						<li>|</li>
 					</ul>
 					<div class="container-fluid">
 						<div class="">
 							<form method="POST" action="{% url 'acceptTicket' %}"> {% csrf_token %}
-								<input type="text" name="id" id="id" value="{{ticket.id}}" hidden="">
+								<input type="text" name="id" id="id" value="{{ .ID }}" hidden="">
 								<button type="submit" class="btn btn-primary" style="margin-bottom: 0.5em; width: 7em">Accepter</button>
 							</form>
 						</div>
 						<div class="">
 							<form method="POST" action="{% url 'refuseTicket' %}"> {% csrf_token %}
-								<input type="text" name="id" id="id" value="{{ticket.id}}" hidden="">
+								<input type="text" name="id" id="id" value="{{ .ID }}" hidden="">
 								<button type="submit" class="btn btn-danger" style="width: 7em">Refuser</button>
 							</form>
 						</div>
@@ -68,6 +68,6 @@
 				</div>
 			</div>
 		</div>
-		{% endfor %}
+		{{ end }}
 	</div>
 </body>

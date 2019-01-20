@@ -23,3 +23,13 @@ type PlanningData struct {
 type TicketFormData struct {
 	BuildingList []Building
 }
+
+type submittedTicketsData struct {
+	TicketList []Ticket
+}
+
+type loginData struct {
+}
+
+type signupData struct {
+}
