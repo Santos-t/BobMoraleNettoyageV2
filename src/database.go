@@ -8,14 +8,43 @@ import (
   _ "github.com/mattn/go-sqlite3"
 )
 
-
+// Lien tuto : v
+//https://www.thepolyglotdeveloper.com/2017/04/using-sqlite-database-golang-application/
 func init_db() {
   //creating and opening a local database called mydb.db using the sqlite3 driver for Go
   database, _ := sql.Open("sqlite3", "./mydb.db")
 
   //creating the tables of the db
-  statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT)")
+  //Table client
+  statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS client (
+    id INTEGER PRIMARY KEY,
+    first_name TEXT,
+    last_name TEXT,
+    phone_number TEXT,
+    address TEXT,
+    role TEXT,
+    )")
   statement.Exec()
+
+  //Table building
+  statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS building (
+    id INTEGER PRIMARY KEY,
+    address TEXT,
+    complement TEXT,
+    floor_nb INTEGER,
+    owner TEXT
+    )")
+  statement.Exec()
+
+  //Table ticket
+  statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS ticket (
+    id INTEGER PRIMARY KEY,
+    client TEXT,
+    last_name TEXT,
+
+    )")
+  statement.Exec()
+
 
   //creating template of insertion that can be executer later
   statement, _ = database.Prepare("INSERT INTO people (firstname, lastname) VALUES (?, ?)")
