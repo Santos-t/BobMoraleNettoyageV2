@@ -73,18 +73,32 @@ func planningHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
-	var owner = User{
-		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
+	if r.Method != http.MethodPost {
+		var owner = User{
+			ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
+		}
+		var list = []Building{
+			Building{
+				Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: owner,
+			},
+		}
+		data := BuildingsData{
+			BuildingList: list,
+		}
+		ticketForm.Execute(w, data)
+	} else {
+		building := r.FormValue("building")
+		floor := r.FormValue("floor")
+		orientation := r.FormValue("orientation")
+		print(building)
+		print(floor)
+		print(orientation)
+
+		data := HomeData{
+			IsAClient: true,
+		}
+		home.Execute(w, data)
 	}
-	var list = []Building{
-		Building{
-			Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: owner,
-		},
-	}
-	data := BuildingsData{
-		BuildingList: list,
-	}
-	ticketForm.Execute(w, data)
 }
 
 func submittedTicketsHandler(w http.ResponseWriter, r *http.Request) {

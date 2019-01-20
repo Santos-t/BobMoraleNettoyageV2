@@ -39,7 +39,7 @@
 	</nav>
 
 	<div class="container-fluid" style="margin-left: 200px; margin-right: 200px;" >
-		<form method="post" action="{% url 'ticketFormPost' %}" enctype='multipart/form-data'> {% csrf_token %}
+		<form method="post"> 
 			<div class="form-group">
 				<label for="building">Sélectionnez le bâtiment</label>
 				<select class="form-control" name="building" id="building" required>
