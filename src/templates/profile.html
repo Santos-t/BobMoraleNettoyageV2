@@ -28,11 +28,11 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="{% url 'ticketForm' %}">Soumettre un ticket</a></li>
-					<li><a href="{% url 'myTickets' %}">Mes tickets en cours</a></li>
+					<li><a href="{{"/ticketForm"}}">Soumettre un ticket</a></li>
+					<li><a href="{{"/myTickets"}}">Mes tickets en cours</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="{% url 'profile' %}">Mon profil</a></li>
+					<li><a href="{{"/profile"}}">Mon profil</a></li>
 				</ul>
 			</div>
 		</div>
@@ -42,8 +42,8 @@
 		<div class="row">
 			<div class="col-md-3 ">
 					<div class="list-group ">
-					<a href="{% url 'profile' %}" class="list-group-item list-group-item-action active">Mon profil</a>
-					<a href="{% url 'buildings' %}" class="list-group-item list-group-item-action">Mes bâtiments</a>
+					<a href="{{"/profile"}}" class="list-group-item list-group-item-action active">Mon profil</a>
+					<a href="{{"/buildings"}}" class="list-group-item list-group-item-action">Mes bâtiments</a>
 				</div>
 			</div>
 			<div class="col-md-9">
