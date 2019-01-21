@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"container/list"
 	"fmt"
+	"strconv"
+	"time"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -18,9 +21,11 @@ type Client struct {
 	Address     string
 	Email       string
 	Client      bool
+	Password    string
 }
 
 type Building struct {
+	ID 				 int
 	Address    string
 	Complement string
 	FloorNb    int
@@ -35,7 +40,7 @@ type Ticket struct {
 	Floor       int
 	Status      string
 	Orientation string
-	Date        string
+	Date        time.Time
 }
 
 func initDb() {
@@ -51,6 +56,8 @@ func initDb() {
 		"lastName TEXT NOT NULL, " +
 		"phoneNumber TEXT NOT NULL, " +
 		"address TEXT, " +
+		"password TEXT, " +
+		"email TEXT, " +
 		"client BOOLEAN" +
 		")",
 	)
@@ -144,6 +151,57 @@ func getClient() *list.List{
 	return result
 }
 
+//building d'un username
+func getBuildingFromUser(userId int) *list.List{
+	database, err := sql.Open("sqlite3", "./mydb.db")
+	checkErr(err)
+
+	rows, err := database.Query("SELECT * FROM building WHERE ownerId IS " + strconv.Itoa(userId))
+	checkErr(err)
+
+	var id int
+	var address string
+	var complement string
+	var floorNb int
+	var clientId int
+	result := list.New()
+	for rows.Next() {
+		err = rows.Scan(&id, &address, &complement, &floorNb, &clientId)
+		var building = Building{
+			ID: id, Address: address, Complement: complement, FloorNb: floorNb, ClientId: clientId,
+		}
+		result.PushBack(building)
+	}
+	rows.Close()
+	return result
+}
+
+//ticket all et d'un user
+func getTickets() *list.List{
+	database, err := sql.Open("sqlite3", "./mydb.db")
+	checkErr(err)
+
+	rows, err := database.Query("SELECT * FROM ticket")
+	checkErr(err)
+
+	var id int
+	var clientId int
+	var buildingId int
+	var floor int
+	var orientation string
+	var date time.Time
+	result := list.New()
+	for rows.Next() {
+		err = rows.Scan(&id, &clientId, &buildingId, &floor, &orientation, &date)
+		var ticket = Ticket{
+			ID: id, OwnerId: clientId, BuildingId: buildingId, Floor: floor, Orientation: orientation, Date: date,
+		}
+		result.PushBack(ticket)
+	}
+	rows.Close()
+	return result
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)
@@ -163,7 +221,6 @@ func main() {
 	}
   insertClient(c)
 	list := getClient()
-
 
 	for e := list.Front(); e != nil; e = e.Next() {
 		var client Client
