@@ -54,41 +54,41 @@ func initDb() {
 	statement.Exec()
 }
 
-func insertClient(first_name, last_name, phone_number, address, role string) {
+func insertClient(firstName, lastName, phoneNumber, address, role string) {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
 	statement, err := database.Prepare("INSERT INTO client(" +
-		"first_name, last_name, phone_number, address, role)" +
+		"firstName, lastName, phoneNumber, address, role)" +
 		"VALUES(?, ?, ?, ?, ?)",
 	)
 	checkErr(err)
-	statement.Exec(first_name, last_name, phone_number, address, role)
+	statement.Exec(firstName, lastName, phoneNumber, address, role)
 	getClient()
 }
 
-func insertBuilding(address, complement string, floor_nb, owner_id int) {
+func insertBuilding(address, complement string, floorNb, ownerId int) {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
 	statement, err := database.Prepare("INSERT INTO building" +
-		"(address, complement, floor_nb, owner_id) VALUES" +
+		"(address, complement, floorNb, ownerId) VALUES" +
 		"(?, ?, ?, ?)",
 	)
 	checkErr(err)
-	statement.Exec(address, complement, floor_nb, owner_id)
+	statement.Exec(address, complement, floorNb, ownerId)
 }
 
-func insertTicket(client_id, building_id, floor int) {
+func insertTicket(clientId, buildingId, floor int) {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
 	statement, err := database.Prepare("INSERT INTO ticket" +
-		"(client_id, building_id, floor) VALUES" +
+		"(clientId, buildingId, floor) VALUES" +
 		"(?, ?, ?)",
 	)
 	checkErr(err)
-	statement.Exec(client_id, building_id, floor)
+	statement.Exec(clientId, buildingId, floor)
 }
 
 func getClient() {
