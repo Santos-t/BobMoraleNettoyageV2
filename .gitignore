@@ -1,3 +1,5 @@
 go/*
 .DS_Store
 src/.DS_Score
+mydb.db
+
