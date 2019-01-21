@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/base64"
 	"html/template"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -35,6 +37,38 @@ type Ticket struct {
 	Date        string
 }
 
+func basicAuth(h http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
+
+		s := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+		if len(s) != 2 {
+			http.Error(w, "Not authorized", 401)
+			return
+		}
+
+		b, err := base64.StdEncoding.DecodeString(s[1])
+		if err != nil {
+			http.Error(w, err.Error(), 401)
+			return
+		}
+
+		pair := strings.SplitN(string(b), ":", 2)
+		if len(pair) != 2 {
+			http.Error(w, "Not authorized", 401)
+			return
+		}
+
+		if pair[0] != "username" || pair[1] != "password" {
+			http.Error(w, "Not authorized", 401)
+			return
+		}
+
+		h.ServeHTTP(w, r)
+	}
+}
+
 var path = "src/templates"
 var home = template.Must(template.ParseFiles(path + "/home.html"))
 var buildings = template.Must(template.ParseFiles(path + "/buildings.html"))
@@ -51,7 +85,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", homeHandler)
+	r.HandleFunc("/", basicAuth(homeHandler))
 	r.HandleFunc("/buildings", buildingsHandler)
 	r.HandleFunc("/profile", profileHandler)
 	r.HandleFunc("/myTickets", myTicketsHandler)
