@@ -176,12 +176,61 @@ func getBuildingFromUser(userId int) *list.List{
 	return result
 }
 
+func getBuildingFromId(buildingId int) *list.List{
+	database, err := sql.Open("sqlite3", "./mydb.db")
+	checkErr(err)
+
+	rows, err := database.Query("SELECT * FROM building WHERE is IS " + strconv.Itoa(buildingId))
+	checkErr(err)
+
+	var id int
+	var address string
+	var complement string
+	var floorNb int
+	var clientId int
+	result := list.New()
+	for rows.Next() {
+		err = rows.Scan(&id, &address, &complement, &floorNb, &clientId)
+		var building = Building{
+			ID: id, Address: address, Complement: complement, FloorNb: floorNb, ClientId: clientId,
+		}
+		result.PushBack(building)
+	}
+	rows.Close()
+	return result
+}
+
 //ticket all et d'un user
 func getTickets() *list.List{
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
 	rows, err := database.Query("SELECT * FROM ticket")
+	checkErr(err)
+
+	var id int
+	var clientId int
+	var buildingId int
+	var floor int
+	var orientation string
+	var date time.Time
+	result := list.New()
+	for rows.Next() {
+		err = rows.Scan(&id, &clientId, &buildingId, &floor, &orientation, &date)
+		var ticket = Ticket{
+			ID: id, OwnerId: clientId, BuildingId: buildingId, Floor: floor, Orientation: orientation, Date: date,
+		}
+		result.PushBack(ticket)
+	}
+	rows.Close()
+	return result
+}
+
+func getTicketsFromUser(userId int) *list.List{
+	database, err := sql.Open("sqlite3", "./mydb.db")
+	checkErr(err)
+
+	rows, err := database.Query("SELECT * FROM ticket WHERE clientId IS " + strconv.Itoa(userId))
 	checkErr(err)
 
 	var id int
