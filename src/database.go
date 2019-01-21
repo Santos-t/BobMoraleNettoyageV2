@@ -282,6 +282,7 @@ func checkErr(err error) {
 	}
 }
 
+/*
 func main() {
   initDb()
   // Comment ajouter un client ==>
@@ -302,3 +303,4 @@ func main() {
 		fmt.Println(client.FirstName + " " + client.PhoneNumber)
 	}
 }
+*/
