@@ -9,7 +9,7 @@ type BuildingsData struct {
 }
 
 type ProfileData struct {
-	CurrentUser User
+	CurrentUser Client
 }
 
 type MyTicketsData struct {

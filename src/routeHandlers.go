@@ -13,12 +13,12 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func buildingsHandler(w http.ResponseWriter, r *http.Request) {
-	var owner = User{
+	var owner = Client{
 		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
 	}
 	var list = []Building{
 		Building{
-			Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: owner,
+			ID: 1, Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, ClientId: owner.ID,
 		},
 	}
 	data := BuildingsData{
@@ -28,7 +28,7 @@ func buildingsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func profileHandler(w http.ResponseWriter, r *http.Request) {
-	var current = User{
+	var current = Client{
 		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
 	}
 	data := ProfileData{
@@ -38,15 +38,15 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func myTicketsHandler(w http.ResponseWriter, r *http.Request) {
-	var current = User{
+	var current = Client{
 		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
 	}
 	var address = Building{
-		Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: current,
+		ID: 1, Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, ClientId: current.ID,
 	}
 	var tickets = []Ticket{
 		Ticket{
-			Owner: current, Address: address, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: "2 mars",
+			OwnerId: current.ID, BuildingId: address.ID, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: "2 mars",
 		},
 	}
 	data := MyTicketsData{
@@ -56,11 +56,11 @@ func myTicketsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func planningHandler(w http.ResponseWriter, r *http.Request) {
-	var current = User{
+	var current = Client{
 		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
 	}
 	var address = Building{
-		Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: current,
+		Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, ClientId: current.ID,
 	}
 	var tickets = []Ticket{
 		Ticket{
@@ -75,12 +75,12 @@ func planningHandler(w http.ResponseWriter, r *http.Request) {
 
 func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		var owner = User{
+		var owner = Client{
 			ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
 		}
 		var list = []Building{
 			Building{
-				ID: 1, Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: owner,
+				ID: 1, Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, ClientId: owner.ID,
 			},
 		}
 		data := BuildingsData{
