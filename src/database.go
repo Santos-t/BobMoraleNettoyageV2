@@ -151,6 +151,31 @@ func getClient() *list.List{
 	return result
 }
 
+func getClientFromId(clientId int) *list.List{
+	database, err := sql.Open("sqlite3", "./mydb.db")
+	checkErr(err)
+
+	rows, err := database.Query("SELECT * FROM client WHERE id IS " + strconv.Itoa(clientId))
+	checkErr(err)
+
+	var id int
+	var firstName string
+	var lastName string
+	var phoneNumber string
+	var address string
+	var role bool
+	result := list.New()
+	for rows.Next() {
+		err = rows.Scan(&id, &firstName, &lastName, &phoneNumber, &address, &role)
+		var owner = Client{
+			ID: id, FirstName: firstName, LastName: lastName, PhoneNumber: phoneNumber, Address: address, Client: role,
+		}
+		result.PushBack(owner)
+	}
+	rows.Close()
+	return result
+}
+
 //building d'un username
 func getBuildingFromUser(userId int) *list.List{
 	database, err := sql.Open("sqlite3", "./mydb.db")
