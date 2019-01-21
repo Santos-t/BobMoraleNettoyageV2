@@ -2,14 +2,41 @@ package main
 
 import (
 	"database/sql"
+	"container/list"
 	"fmt"
-	"strconv"
-
 	_ "github.com/mattn/go-sqlite3"
 )
 
 // Lien tuto : v
 //https://www.thepolyglotdeveloper.com/2017/04/using-sqlite-database-golang-application/
+
+type Client struct {
+	ID          int
+	FirstName   string
+	LastName    string
+	PhoneNumber string
+	Address     string
+	Email       string
+	Client      bool
+}
+
+type Building struct {
+	Address    string
+	Complement string
+	FloorNb    int
+	ClientId	 int
+}
+
+type Ticket struct {
+	ID          int
+	OwnerId     int
+	BuildingId  int
+	Img         string
+	Floor       int
+	Status      string
+	Orientation string
+	Date        string
+}
 
 func initDb() {
 	//creating and opening a local database called mydb.db using the sqlite3 driver for Go
@@ -20,11 +47,11 @@ func initDb() {
 	//Table client
 	statement, err := database.Prepare("CREATE TABLE IF NOT EXISTS client(" +
 		"id INTEGER PRIMARY KEY, " +
-		"first_name TEXT NOT NULL, " +
-		"last_name TEXT NOT NULL, " +
-		"phone_number TEXT NOT NULL, " +
+		"firstName TEXT NOT NULL, " +
+		"lastName TEXT NOT NULL, " +
+		"phoneNumber TEXT NOT NULL, " +
 		"address TEXT, " +
-		"role TEXT " +
+		"client BOOLEAN" +
 		")",
 	)
 	checkErr(err)
@@ -35,8 +62,8 @@ func initDb() {
 		"id INTEGER PRIMARY KEY, " +
 		"address TEXT NOT NULL, " +
 		"complement TEXT, " +
-		"floor_nb INTEGER, " +
-		"owner_id INTEGER " +
+		"floorNb INTEGER, " +
+		"ownerId INTEGER" +
 		")",
 	)
 	checkErr(err)
@@ -45,29 +72,30 @@ func initDb() {
 	//Table ticket
 	statement, err = database.Prepare("CREATE TABLE IF NOT EXISTS ticket(" +
 		"id INTEGER PRIMARY KEY, " +
-		"client_id INTEGER, " +
-		"building_id INTEGER, " +
+		"clientId INTEGER, " +
+		"buildingId INTEGER, " +
 		"floor INTEGER, " +
-		"img_path TEXT)",
+		"orientation TEXT, " +
+		"date DATETIME, " +
+		"imgPath TEXT)",
 	)
 	checkErr(err)
 	statement.Exec()
 }
 
-func insertClient(firstName, lastName, phoneNumber, address, role string) {
+func insertClient(client Client) {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
 	statement, err := database.Prepare("INSERT INTO client(" +
-		"firstName, lastName, phoneNumber, address, role)" +
+		"firstName, lastName, phoneNumber, address, client)" +
 		"VALUES(?, ?, ?, ?, ?)",
 	)
 	checkErr(err)
-	statement.Exec(firstName, lastName, phoneNumber, address, role)
-	getClient()
+	statement.Exec(client.FirstName, client.LastName, client.PhoneNumber, client.Address, client.Client)
 }
 
-func insertBuilding(address, complement string, floorNb, ownerId int) {
+func insertBuilding(building Building) {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
@@ -76,22 +104,22 @@ func insertBuilding(address, complement string, floorNb, ownerId int) {
 		"(?, ?, ?, ?)",
 	)
 	checkErr(err)
-	statement.Exec(address, complement, floorNb, ownerId)
+	statement.Exec(building.Address, building.Complement, building.FloorNb, building.ClientId)
 }
 
-func insertTicket(clientId, buildingId, floor int) {
+func insertTicket(ticket Ticket) {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
 	statement, err := database.Prepare("INSERT INTO ticket" +
-		"(clientId, buildingId, floor) VALUES" +
-		"(?, ?, ?)",
+		"(clientId, buildingId, floor, orientation, date, imgPath) VALUES" +
+		"(?, ?, ?, ?, ?, ?)",
 	)
 	checkErr(err)
-	statement.Exec(clientId, buildingId, floor)
+	statement.Exec(ticket.OwnerId, ticket.BuildingId, ticket.Floor, ticket.Orientation, ticket.Date, ticket.Img)
 }
 
-func getClient() {
+func getClient() *list.List{
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
@@ -99,16 +127,21 @@ func getClient() {
 	checkErr(err)
 
 	var id int
-	var first_name string
-	var last_name string
-	var phone_number string
+	var firstName string
+	var lastName string
+	var phoneNumber string
 	var address string
-	var role string
+	var role bool
+	result := list.New()
 	for rows.Next() {
-		err = rows.Scan(&id, &first_name, &last_name, &phone_number, &address, &role)
-		fmt.Println(strconv.Itoa(id) + ": " + first_name + " " + last_name + " " + phone_number + " " + address + " " + role)
+		err = rows.Scan(&id, &firstName, &lastName, &phoneNumber, &address, &role)
+		var owner = Client{
+			ID: id, FirstName: firstName, LastName: lastName, PhoneNumber: phoneNumber, Address: address, Client: role,
+		}
+		result.PushBack(owner)
 	}
 	rows.Close()
+	return result
 }
 
 func checkErr(err error) {
@@ -117,15 +150,24 @@ func checkErr(err error) {
 	}
 }
 
-/*func main() {
-	initDb()
+func main() {
+  initDb()
+  // Comment ajouter un client ==>
+  firstName := "Bob"
+  lastName := "Moral"
+  phoneNumber := "0635284956"
+  address := "2 rue des petits cailloux"
+  client := true
+	var c = Client{
+		ID: 0,  FirstName: firstName, LastName: lastName, PhoneNumber: phoneNumber, Address: address, Client: client,
+	}
+  insertClient(c)
+	list := getClient()
 
-	// Comment ajouter un client ==>
 
-	  first_name := "Bob"
-	  last_name := "Moral"
-	  phone_number := "0635284956"
-	  address := "2 rue des petits cailloux"
-	  role := "admin"
-	  insert_client(first_name, last_name, phone_number, address, role)
-}*/
+	for e := list.Front(); e != nil; e = e.Next() {
+		var client Client
+		client = e.Value.(Client)
+		fmt.Println(client.FirstName + " " + client.PhoneNumber)
+	}
+}
