@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -38,19 +39,9 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func myTicketsHandler(w http.ResponseWriter, r *http.Request) {
-	var current = Client{
-		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
-	}
-	var address = Building{
-		ID: 1, Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, ClientId: current.ID,
-	}
-	var tickets = []Ticket{
-		Ticket{
-			OwnerId: current.ID, BuildingId: address.ID, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: "2 mars",
-		},
-	}
+	list := getTicketsFromUser(idUser)
 	data := MyTicketsData{
-		TicketList: tickets,
+		TicketList: list,
 	}
 	myTickets.Execute(w, data)
 }
@@ -64,7 +55,7 @@ func planningHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	var tickets = []Ticket{
 		Ticket{
-			Owner: current, Address: address, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: "2 mars",
+			OwnerId: current.ID, BuildingId: address.ID, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: time.Now(),
 		},
 	}
 	data := PlanningData{
@@ -88,17 +79,18 @@ func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		ticketForm.Execute(w, data)
 	} else {
-		cl := r.FormValue("clientId")
 		bu := r.FormValue("building")
 		fl := r.FormValue("floor")
-		//orientation := r.FormValue("orientation")
-		clientID, err := strconv.Atoi(cl)
+		orientation := r.FormValue("orientation")
 		building, err := strconv.Atoi(bu)
 		floor, err := strconv.Atoi(fl)
 		if err != nil {
 			print("Form not conform")
 		}
-		insertTicket(clientID, building, floor)
+		var ticket = Ticket{
+			OwnerId: idUser, BuildingId: building, Img: "img", Floor: floor, Status: "En cours", Orientation: orientation, Date: time.Now(),
+		}
+		insertTicket(ticket)
 
 		data := HomeData{
 			IsAClient: true,
@@ -108,15 +100,15 @@ func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func submittedTicketsHandler(w http.ResponseWriter, r *http.Request) {
-	var current = User{
+	var current = Client{
 		ID: 1, FirstName: "Antoine", LastName: "Legrand", PhoneNumber: "06", Address: "3 rue Gazan", Client: true,
 	}
 	var address = Building{
-		Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: current,
+		Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, ClientId: current.ID,
 	}
 	var tickets = []Ticket{
 		Ticket{
-			Owner: current, Address: address, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: "2 mars",
+			OwnerId: current.ID, BuildingId: address.ID, Img: "img", Floor: 3, Status: "En cours", Orientation: "NNE", Date: time.Now(),
 		},
 	}
 	data := PlanningData{

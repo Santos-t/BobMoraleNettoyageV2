@@ -1,5 +1,7 @@
 package main
 
+import "container/list"
+
 type HomeData struct {
 	IsAClient bool
 }
@@ -13,7 +15,7 @@ type ProfileData struct {
 }
 
 type MyTicketsData struct {
-	TicketList []Ticket
+	TicketList *list.List
 }
 
 type PlanningData struct {

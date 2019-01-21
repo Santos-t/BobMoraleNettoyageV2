@@ -8,7 +8,7 @@ import (
 
 var idUser int
 
-func contains(s []User, e string) int {
+func contains(s []Client, e string) int {
 	for i := 0; i < len(s); i++ {
 		if s[i].Email == e {
 			return i
@@ -39,7 +39,6 @@ func basicAuth(h http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		clients := getClient()
 		if pair[0] != "username" || pair[1] != "password" {
 			http.Error(w, "Not authorized", 401)
 			return

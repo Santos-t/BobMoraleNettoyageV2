@@ -1,9 +1,8 @@
 package main
 
 import (
-	"database/sql"
 	"container/list"
-	"fmt"
+	"database/sql"
 	"strconv"
 	"time"
 
@@ -25,11 +24,11 @@ type Client struct {
 }
 
 type Building struct {
-	ID 				 int
+	ID         int
 	Address    string
 	Complement string
 	FloorNb    int
-	ClientId	 int
+	ClientId   int
 }
 
 type Ticket struct {
@@ -126,7 +125,7 @@ func insertTicket(ticket Ticket) {
 	statement.Exec(ticket.OwnerId, ticket.BuildingId, ticket.Floor, ticket.Orientation, ticket.Date, ticket.Img)
 }
 
-func getClient() *list.List{
+func getClient() *list.List {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
@@ -177,7 +176,7 @@ func getClientFromId(clientId int) *list.List{
 }
 
 //building d'un username
-func getBuildingFromUser(userId int) *list.List{
+func getBuildingFromUser(userId int) *list.List {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
@@ -201,7 +200,7 @@ func getBuildingFromUser(userId int) *list.List{
 	return result
 }
 
-func getBuildingFromId(buildingId int) *list.List{
+func getBuildingFromId(buildingId int) *list.List {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
@@ -226,7 +225,7 @@ func getBuildingFromId(buildingId int) *list.List{
 }
 
 //ticket all et d'un user
-func getTickets() *list.List{
+func getTickets() *list.List {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
@@ -251,7 +250,7 @@ func getTickets() *list.List{
 	return result
 }
 
-func getTicketsFromUser(userId int) *list.List{
+func getTicketsFromUser(userId int) *list.List {
 	database, err := sql.Open("sqlite3", "./mydb.db")
 	checkErr(err)
 
