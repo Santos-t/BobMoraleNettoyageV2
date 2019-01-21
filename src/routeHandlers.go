@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -79,7 +80,7 @@ func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		var list = []Building{
 			Building{
-				Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: owner,
+				ID: 1, Address: "3 rue gazan", Complement: "Bat. C", FloorNb: 7, Owner: owner,
 			},
 		}
 		data := BuildingsData{
@@ -87,12 +88,17 @@ func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		ticketForm.Execute(w, data)
 	} else {
-		building := r.FormValue("building")
-		floor := r.FormValue("floor")
-		orientation := r.FormValue("orientation")
-		print(building)
-		print(floor)
-		print(orientation)
+		cl := r.FormValue("clientId")
+		bu := r.FormValue("building")
+		fl := r.FormValue("floor")
+		//orientation := r.FormValue("orientation")
+		clientId, err := strconv.Atoi(cl)
+		building, err := strconv.Atoi(bu)
+		floor, err := strconv.Atoi(fl)
+		if err != nil {
+			print("Form not conform")
+		}
+		insertTicket(clientId, building, floor)
 
 		data := HomeData{
 			IsAClient: true,

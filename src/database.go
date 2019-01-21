@@ -118,14 +118,14 @@ func checkErr(err error) {
 }
 
 /*func main() {
-  initDb()
+	initDb()
 
-  // Comment ajouter un client ==>
+	// Comment ajouter un client ==>
 
-  first_name := "Bob"
-  last_name := "Moral"
-  phone_number := "0635284956"
-  address := "2 rue des petits cailloux"
-  role := "admin"
-  insert_client(first_name, last_name, phone_number, address, role)
+	  first_name := "Bob"
+	  last_name := "Moral"
+	  phone_number := "0635284956"
+	  address := "2 rue des petits cailloux"
+	  role := "admin"
+	  insert_client(first_name, last_name, phone_number, address, role)
 }*/

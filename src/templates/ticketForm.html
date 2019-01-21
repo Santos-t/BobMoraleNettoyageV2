@@ -44,7 +44,7 @@
 				<label for="building">Sélectionnez le bâtiment</label>
 				<select class="form-control" name="building" id="building" required>
 					{{ range .BuildingList }}
-						<option value="{{ .Address }}">{{ .Address }}    {{ .Complement }}</option>
+						<option value="{{ .ID }}">{{ .Address }}    {{ .Complement }}</option>
 					{{ end }}
 				</select>
 			</div>
@@ -87,6 +87,7 @@
 				<label for="hour">Heure</label>
 				<input type="time" class="form-control" name="hour" id="hour" placeholder="0" required>
 			</div>
+			<input type="text" name="clientId" hidden="" value="2">
 			<button type="submit" class="btn btn-primary">Valider</button>
 		</form>
 	</div>

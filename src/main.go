@@ -20,6 +20,7 @@ type User struct {
 }
 
 type Building struct {
+	ID         int
 	Address    string
 	Complement string
 	FloorNb    int
