@@ -92,13 +92,13 @@ func ticketFormHandler(w http.ResponseWriter, r *http.Request) {
 		bu := r.FormValue("building")
 		fl := r.FormValue("floor")
 		//orientation := r.FormValue("orientation")
-		clientId, err := strconv.Atoi(cl)
+		clientID, err := strconv.Atoi(cl)
 		building, err := strconv.Atoi(bu)
 		floor, err := strconv.Atoi(fl)
 		if err != nil {
 			print("Form not conform")
 		}
-		insertTicket(clientId, building, floor)
+		insertTicket(clientID, building, floor)
 
 		data := HomeData{
 			IsAClient: true,
